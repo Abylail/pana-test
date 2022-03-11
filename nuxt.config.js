@@ -1,6 +1,10 @@
 export default {
     // Global page headers: https://go.nuxtjs.dev/config-head
     ssr: false,
+    server: {
+        port: 3000,
+    },
+    target: 'server',
     head: {
         title: 'pana',
         htmlAttrs: {
