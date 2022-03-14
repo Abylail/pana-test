@@ -68,10 +68,21 @@
       <div class="facilities__card">
         <div class="facilities__title">Языки</div>
         <p class="facilities__card-description">На каких языках говорят у вас в заведении?</p>
-        <BaseSelect
-          :options="languages"
-          @input="selectLanguage"
-        />
+<!--        <BaseSelect-->
+<!--          :options="languages"-->
+<!--          @input="selectLanguage"-->
+<!--        />-->
+        <multiselect
+            v-model="langValue"
+            placeholder="Не применяется"
+            label="name"
+            track-by="code"
+            :options="languages"
+            :multiple="true"
+            :taggable="true"
+            @tag="addLang">
+        </multiselect>
+
       </div>
 
       <div class="facilities__card">
@@ -115,22 +126,24 @@
 
 <script>
 import BaseSelect from "@/components/base/BaseSelect";
-import BaseConfirm from "../../../../../../components/base/BaseConfirm";
+import BaseConfirm from "@/components/base/BaseConfirm";
 import {mapActions, mapGetters} from "vuex";
 import {Dictionary} from "@/store/dictionary";
-import BaseTextArea from "../../../../../../components/base/BaseTextArea";
-import BaseButton from "../../../../../../components/base/BaseButton";
-import BaseIcon from "../../../../../../components/base/BaseIcon";
-import PhotoUpload from "../../../../../../components/common/photo/photoUpload";
-import PhotoList from "../../../../../../components/common/photo/photoList";
+import BaseTextArea from "@/components/base/BaseTextArea";
+import BaseButton from "@/components/base/BaseButton";
+import BaseIcon from "@/components/base/BaseIcon";
+import PhotoUpload from "@/components/common/photo/photoUpload";
+import PhotoList from "@/components/common/photo/photoList";
 import BaseInput from "@/components/base/BaseInput";
 import Slide from "@/components/transitions/Slide";
+import Multiselect from 'vue-multiselect'
 
 export default {
-  components: {Slide, BaseInput, PhotoList, PhotoUpload, BaseIcon, BaseButton, BaseTextArea, BaseConfirm, BaseSelect},
+  components: {Slide, BaseInput, PhotoList, PhotoUpload, BaseIcon, BaseButton, BaseTextArea, BaseConfirm, BaseSelect,Multiselect},
   data: () => ({
     Dictionary,
     loading: true,
+    langValue:[],
     breakfastType: [
       {id: 1, name: "Да, это включено в стоимость"},
       {id: 2, name: "Да, по запросу"}
@@ -189,6 +202,13 @@ export default {
       fetchDict: "dictionary/fetchDict",
       addConvenience: "hotel/info/addConveniences"
     }),
+    addLang(newLang) {
+      console.log(newLang)
+      const lang = {
+        name:newLang
+      }
+      this.langValue.push(lang)
+    },
     async getInfo() {
       this.loading = true;
       await this.fetchConvenience({id: this.id});
